@@ -42,12 +42,12 @@ void ATankPawn::Tick(float DeltaTime)
 
 	FVector currentLocation = GetActorLocation();
 	FVector forwardVector = GetActorForwardVector();
-	FVector movePosition = currentLocation + forwardVector * MoveSpeed * _targetForwardAxisValue * DeltaTime;
+	FVector movePosition = currentLocation + forwardVector * MoveSpeed * TargetForwardAxisValue * DeltaTime;
 	
 	FVector rightVector = GetActorRightVector();
-	FVector moveRightPosion = currentLocation + rightVector * MoveSpeed * _targetRightAxisValue * DeltaTime;
+	FVector moveRightPosion = currentLocation + rightVector * MoveSpeed * TargetRightAxisValue * DeltaTime;
 
-	if(_targetForwardAxisValue != 0) SetActorLocation(movePosition, true);
+	if(TargetForwardAxisValue != 0) SetActorLocation(movePosition, true);
 	else SetActorLocation(moveRightPosion, true);
 
 }
@@ -61,11 +61,11 @@ void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATankPawn::MoveForward(float AxisValue)
 {
-	_targetForwardAxisValue = AxisValue;
+	TargetForwardAxisValue = AxisValue;
 }
 
 void ATankPawn::MoveRight(float AxisValue)
 {
-	_targetRightAxisValue = AxisValue;
+	TargetRightAxisValue = AxisValue;
 }
 

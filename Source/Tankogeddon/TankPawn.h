@@ -32,8 +32,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
 		float RotationSpeed = 100;
 
-	float _targetForwardAxisValue;
-	float _targetRightAxisValue;
+	float TargetForwardAxisValue;
+	float TargetRightAxisValue;
 
 public:
 	// Sets default values for this pawn's properties
