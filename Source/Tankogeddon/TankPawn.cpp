@@ -42,8 +42,8 @@ void ATankPawn::Tick(float DeltaTime)
 
 	FVector CurrentPersonLocation = GetActorLocation();
 	FVector MovePersonPosition;
-	MovePersonPosition.X = GetActorLocation().X + GetActorForwardVector().X * MoveSpeed * PersonForwardAxisValue * DeltaTime;
-	MovePersonPosition.Y = GetActorLocation().Y + GetActorRightVector().Y * MoveSpeed * PersonRightAxisValue * DeltaTime;
+	MovePersonPosition.X = GetActorLocation().X + GetActorForwardVector().X * MoveSpeed * TargetForwardAxisValue * DeltaTime;
+	MovePersonPosition.Y = GetActorLocation().Y + GetActorRightVector().Y * MoveSpeed * TargetRightAxisValue * DeltaTime;
 	SetActorLocation(MovePersonPosition, true);
 
 }
