@@ -28,12 +28,12 @@ protected:
 		UCameraComponent* Camera;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
-		float MoveSpeed = 100;
+		float MoveSpeed = 100.f;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
-		float RotationSpeed = 100;
+		float RotationSpeed = 100.f;
 
-	float TargetForwardAxisValue;
-	float TargetRightAxisValue;
+	float TargetForwardAxisValue = 0.f;
+	float TargetRotateRightAxisValue = 0.f;
 
 public:
 	// Sets default values for this pawn's properties
@@ -42,7 +42,7 @@ public:
 	UFUNCTION()
 		void MoveForward(float AxisValue);
 	UFUNCTION()
-		void MoveRight(float AxisValue);
+		void RotateRight(float AxisValue);
 
 protected:
 	// Called when the game starts or when spawned

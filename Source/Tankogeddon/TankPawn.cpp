@@ -14,7 +14,7 @@ ATankPawn::ATankPawn()
 
 	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank body"));
 	RootComponent = BodyMesh;
-	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tanl turret"));
+	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank turret"));
 	TurretMesh->SetupAttachment(BodyMesh);
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring arm"));
@@ -39,12 +39,14 @@ void ATankPawn::BeginPlay()
 void ATankPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	FVector CurrentPersonLocation = GetActorLocation();
-	FVector MovePersonPosition;
-	MovePersonPosition.X = GetActorLocation().X + GetActorForwardVector().X * MoveSpeed * TargetForwardAxisValue * DeltaTime;
-	MovePersonPosition.Y = GetActorLocation().Y + GetActorRightVector().Y * MoveSpeed * TargetRightAxisValue * DeltaTime;
+	FVector MovePersonPosition= GetActorLocation()+ GetActorForwardVector() * MoveSpeed * TargetForwardAxisValue * DeltaTime;
 	SetActorLocation(MovePersonPosition, true);
+
+	float YawRotation = RotationSpeed * TargetRotateRightAxisValue * DeltaTime;
+	FRotator CurrentRotation = GetActorRotation();
+	YawRotation = CurrentRotation.Yaw + YawRotation;
+	FRotator NewRotation = FRotator(0.f, YawRotation, 0.f);
+	SetActorRotation(NewRotation);
 
 }
 
@@ -60,8 +62,8 @@ void ATankPawn::MoveForward(float AxisValue)
 	TargetForwardAxisValue = AxisValue;
 }
 
-void ATankPawn::MoveRight(float AxisValue)
+void ATankPawn::RotateRight(float AxisValue)
 {
-	TargetRightAxisValue = AxisValue;
+	TargetRotateRightAxisValue = AxisValue;
 }
 
