@@ -47,21 +47,27 @@ void ACannon::CasualFire()
 		if(ProjectileAmmo == 0)
 		{
 			GEngine->AddOnScreenDebugMessage(10,1,FColor::Red, "No shells");
-			return;
 		}
-		GEngine->AddOnScreenDebugMessage(10,1,FColor::Green, "Fire prijectile");
-		--ProjectileAmmo;
-		UE_LOG(LogTemp, Warning, TEXT("Ammo %d"), ProjectileAmmo);
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(10,1,FColor::Green, "Fire prijectile");
+			--ProjectileAmmo;
+			UE_LOG(LogTemp, Warning, TEXT("Ammo %d"), ProjectileAmmo);
+		}
+
 	}
 	else
 	{
 		if(TraceAmmo == 0)
 		{
 			GEngine->AddOnScreenDebugMessage(10,1,FColor::Red, "No shells");
-			return;
 		}
-		GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire trace");
-		--TraceAmmo;
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire trace");
+			--TraceAmmo;
+			UE_LOG(LogTemp, Warning, TEXT("Ammo %d"), TraceAmmo);
+		}
 	}
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &ACannon::Reload, 1/FireRate, false);
 }
