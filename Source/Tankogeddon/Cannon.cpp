@@ -20,6 +20,23 @@ ACannon::ACannon()
 
 void ACannon::Fire()
 {
+	if(FireType == EFireType::Casual)
+	{
+		CasualFire();
+	}
+	else
+	{
+		AutoFire();
+	}
+}
+
+void ACannon::FireSpecial()
+{
+	GEngine->AddOnScreenDebugMessage(10, 1, FColor::Red, "Fire special");
+}
+
+void ACannon::CasualFire()
+{
 	if(!bReadyToFire)
 	{
 		return;
@@ -27,14 +44,68 @@ void ACannon::Fire()
 	bReadyToFire = false;
 	if(CannonType == ECannonType::FireProjectile)
 	{
-		GEngine->AddOnScreenDebugMessage(10,1,FColor::Green, "Fire prijectile");
+		if(ProjectileAmmo == 0)
+		{
+			GEngine->AddOnScreenDebugMessage(10,1,FColor::Red, "No shells");
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(10,1,FColor::Green, "Fire prijectile");
+			--ProjectileAmmo;
+			UE_LOG(LogTemp, Warning, TEXT("Ammo %d"), ProjectileAmmo);
+		}
+
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire trace");
+		if(TraceAmmo == 0)
+		{
+			GEngine->AddOnScreenDebugMessage(10,1,FColor::Red, "No shells");
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire trace");
+			--TraceAmmo;
+			UE_LOG(LogTemp, Warning, TEXT("Ammo %d"), TraceAmmo);
+		}
 	}
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &ACannon::Reload, 1/FireRate, false);
 }
+
+void ACannon::ChangeFireType()
+{
+	if(FireType == EFireType::Casual)
+	{
+		FireType = EFireType::Auto;
+	}
+	else
+	{
+		FireType = EFireType::Casual;
+	}
+}
+
+void ACannon::AutoFire()
+{
+	GetWorld()->GetTimerManager().SetTimer(AutoFireTimer, this, &ACannon::AutoTypeFire, 1.0, true);
+}
+
+void ACannon::AutoTypeFire()
+{
+	
+	if(CurrentCountShotAutoType == CountShotAutoType)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("STOP FIRE"));
+		GetWorldTimerManager().ClearTimer(AutoFireTimer);
+		CurrentCountShotAutoType = 0;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Boom: %d"), CurrentCountShotAutoType);
+		GEngine->AddOnScreenDebugMessage(10, 0.5, FColor::Blue, "Fire");
+		++CurrentCountShotAutoType;
+	}
+}
+
 
 bool ACannon::IsReadyToFire()
 {
@@ -57,6 +128,5 @@ void ACannon::BeginPlay()
 void ACannon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 

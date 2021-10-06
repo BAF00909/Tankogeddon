@@ -60,7 +60,7 @@ void ATankPawn::Tick(float DeltaTime)
 	FRotator CurrentRotation = GetActorRotation();
 	YawRotation = CurrentRotation.Yaw + YawRotation;
 	FRotator NewRotation = FRotator(0.f, YawRotation, 0.f);
-	UE_LOG(TankogeddonLog, Warning, TEXT("Rotation: %f"), YawRotation);
+	
 	SetActorRotation(NewRotation);
 
 	//Rotate turret of tank
@@ -113,5 +113,23 @@ void ATankPawn::Fire()
 		Cannon->Fire();
 	}
 }
+
+void ATankPawn::FireSpecial()
+{
+	if(Cannon)
+	{
+		Cannon->FireSpecial();
+	}
+}
+
+void ATankPawn::ChangeFireType()
+{
+	if(Cannon)
+	{
+		Cannon->ChangeFireType();
+	}
+}
+
+
 
 
