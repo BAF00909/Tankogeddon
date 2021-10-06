@@ -32,6 +32,11 @@ protected:
 	float FireDamage = 1;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Fire params")
 	ECannonType CannonType = ECannonType::FireProjectile;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Fire params")
+	int ProjectileAmmo = 5;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Fire params")
+	int TraceAmmo = 5;
+
 
 	FTimerHandle ReloadTimerHandle;
 	bool bReadyToFire = false;
@@ -41,6 +46,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void Fire();
 	bool IsReadyToFire();
+	void FireSpecial();
 
 	protected:
 	void Reload();

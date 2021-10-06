@@ -27,14 +27,33 @@ void ACannon::Fire()
 	bReadyToFire = false;
 	if(CannonType == ECannonType::FireProjectile)
 	{
+		if(ProjectileAmmo == 0)
+		{
+			GEngine->AddOnScreenDebugMessage(10,1,FColor::Red, "No shells");
+			return;
+		}
 		GEngine->AddOnScreenDebugMessage(10,1,FColor::Green, "Fire prijectile");
+		--ProjectileAmmo;
+		UE_LOG(LogTemp, Warning, TEXT("Ammo %d"), ProjectileAmmo);
 	}
 	else
 	{
+		if(TraceAmmo == 0)
+		{
+			GEngine->AddOnScreenDebugMessage(10,1,FColor::Red, "No shells");
+			return;
+		}
 		GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire trace");
+		--TraceAmmo;
 	}
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &ACannon::Reload, 1/FireRate, false);
 }
+
+void ACannon::FireSpecial()
+{
+	GEngine->AddOnScreenDebugMessage(10, 1, FColor::Red, "Fire special");
+}
+
 
 bool ACannon::IsReadyToFire()
 {

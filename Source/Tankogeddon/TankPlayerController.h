@@ -30,5 +30,6 @@ protected:
 	void MoveForward(float AxisValue);
 	void RotateRight(float AxisValue);
 	void Fire();
+	void FireSpecial();
 	
 };
