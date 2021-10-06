@@ -35,11 +35,17 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Fire params")
 	int ProjectileAmmo = 5;
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Fire params")
-	int TraceAmmo = 5;
-
+	uint8 TraceAmmo = 5;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Fire params")
+	EFireType FireType = EFireType::Casual;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Fire params")
+	uint8 CountShotAutoType = 3;
+	
 
 	FTimerHandle ReloadTimerHandle;
 	bool bReadyToFire = false;
+	FTimerHandle AutoFireTimer;
+	uint8 CurrentCountShotAutoType = 0;
 
 public:	
 	// Called every frame
@@ -47,6 +53,10 @@ public:
 	void Fire();
 	bool IsReadyToFire();
 	void FireSpecial();
+	void CasualFire();
+	void ChangeFireType();
+	void AutoFire();
+	void AutoTypeFire();
 
 	protected:
 	void Reload();

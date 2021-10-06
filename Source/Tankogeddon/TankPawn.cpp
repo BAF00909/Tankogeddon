@@ -122,5 +122,14 @@ void ATankPawn::FireSpecial()
 	}
 }
 
+void ATankPawn::ChangeFireType()
+{
+	if(Cannon)
+	{
+		Cannon->ChangeFireType();
+	}
+}
+
+
 
 

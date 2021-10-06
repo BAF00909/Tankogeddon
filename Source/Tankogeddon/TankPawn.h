@@ -65,6 +65,8 @@ public:
 		void Fire();
 	UFUNCTION()
 		void FireSpecial();
+	UFUNCTION()
+		void ChangeFireType();
 
 protected:
 	// Called when the game starts or when spawned

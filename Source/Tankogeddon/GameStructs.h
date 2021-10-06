@@ -14,4 +14,10 @@ enum class ECannonType : uint8 {
 	FireProjectile = 0 UMETA(DisplayName = "Use projectile"),
 	FireTrace = 1  UMETA(DisplayName = "Use trace")
 };
+UENUM(BlueprintType)
+enum class EFireType : uint8
+{
+	Casual = 0 UMETA(DisplayName = "Use casual fire type"),
+	Auto = 1 UMETA(DisplayName = "Use auto fire type"),
+};
 

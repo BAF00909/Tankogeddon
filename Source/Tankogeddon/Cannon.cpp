@@ -20,6 +20,23 @@ ACannon::ACannon()
 
 void ACannon::Fire()
 {
+	if(FireType == EFireType::Casual)
+	{
+		CasualFire();
+	}
+	else
+	{
+		AutoFire();
+	}
+}
+
+void ACannon::FireSpecial()
+{
+	GEngine->AddOnScreenDebugMessage(10, 1, FColor::Red, "Fire special");
+}
+
+void ACannon::CasualFire()
+{
 	if(!bReadyToFire)
 	{
 		return;
@@ -49,9 +66,38 @@ void ACannon::Fire()
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &ACannon::Reload, 1/FireRate, false);
 }
 
-void ACannon::FireSpecial()
+void ACannon::ChangeFireType()
 {
-	GEngine->AddOnScreenDebugMessage(10, 1, FColor::Red, "Fire special");
+	if(FireType == EFireType::Casual)
+	{
+		FireType = EFireType::Auto;
+	}
+	else
+	{
+		FireType = EFireType::Casual;
+	}
+}
+
+void ACannon::AutoFire()
+{
+	GetWorld()->GetTimerManager().SetTimer(AutoFireTimer, this, &ACannon::AutoTypeFire, 1.0, true);
+}
+
+void ACannon::AutoTypeFire()
+{
+	
+	if(CurrentCountShotAutoType == CountShotAutoType)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("STOP FIRE"));
+		GetWorldTimerManager().ClearTimer(AutoFireTimer);
+		CurrentCountShotAutoType = 0;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Boom: %d"), CurrentCountShotAutoType);
+		GEngine->AddOnScreenDebugMessage(10, 0.5, FColor::Blue, "Fire");
+		++CurrentCountShotAutoType;
+	}
 }
 
 
@@ -76,6 +122,5 @@ void ACannon::BeginPlay()
 void ACannon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
