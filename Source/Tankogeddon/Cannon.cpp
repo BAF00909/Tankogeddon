@@ -2,6 +2,7 @@
 
 
 #include "Cannon.h"
+#include "Components/SceneComponent.h"
 
 // Sets default values
 ACannon::ACannon()
@@ -9,8 +10,8 @@ ACannon::ACannon()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	USceneComponent* SceeneCpm = CreateDefaultSubobject<USceneComponent>(TEXT("ROOT"));
-	RootComponent = SceeneCpm;
+	USceneComponent* SceeneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("ROOT"));
+	RootComponent = SceeneComponent;
 	CannonMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cannon mesh"));
 	CannonMesh->SetupAttachment(RootComponent);
 	ProjectileSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon spawn point"));
@@ -52,9 +53,15 @@ void ACannon::CasualFire()
 		{
 			GEngine->AddOnScreenDebugMessage(10,1,FColor::Green, "Fire prijectile");
 			--ProjectileAmmo;
-			UE_LOG(LogTemp, Warning, TEXT("Ammo %d"), ProjectileAmmo);
+			AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(
+					ProjectileClass, ProjectileSpawnPoint->GetComponentLocation(),
+					ProjectileSpawnPoint->GetComponentRotation()
+				);
+			if(Projectile)
+			{
+				Projectile->Start();
+			}
 		}
-
 	}
 	else
 	{
