@@ -8,9 +8,8 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TankPawn = Cast<ATankPawn>(GetPawn());
 	bShowMouseCursor = true;
+	TankPawn = Cast<ATankPawn>(GetPawn());
 }
 
 void ATankPlayerController::SetupInputComponent()
