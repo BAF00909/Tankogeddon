@@ -63,6 +63,11 @@ public:
 	bool IsReadyToFire();
 	bool HasSpecialFire() const;
 
+	void SetVisibility(bool bIsVisible);
+
+	UFUNCTION()
+	void AddAmmo();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;

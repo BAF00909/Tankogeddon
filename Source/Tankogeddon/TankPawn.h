@@ -48,12 +48,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
 	TSubclassOf<class ACannon> DefaultCannonClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|SecondCanon")
-	int32 CannonsaActiveIndex = 0;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|SecondCanon")
-	TArray<TSubclassOf<class ACannon>> Cannons;
 	
 
 	UPROPERTY()
@@ -84,13 +78,24 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Turret")
 	void SetupCannon(TSubclassOf<class ACannon> InCannonClass);
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
+	class ACannon* FirstCannon = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
+	class ACannon* SecondCannon = nullptr;
+
+	UFUNCTION(BlueprintPure, Category = "Turret")
+	class ACannon* GetFirstCannon() const;
 
 	UFUNCTION()
 	void ChangeWeapon();
 
+	UFUNCTION()
+	void AddAmmo();
+
 private:
 	UPROPERTY()
-		class ACannon* Cannon = nullptr;
+	class ACannon* Cannon = nullptr;
 
 	float CurrentMoveForwardAxis = 0.f;
 	float TargetMoveForwardAxis = 0.f;

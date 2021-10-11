@@ -157,3 +157,15 @@ void ACannon::Shot()
 		GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &ACannon::Reload, 1.f / FireRate, false);
 	}
 }
+
+void ACannon::SetVisibility(bool bIsVisible)
+{
+	Mesh->SetHiddenInGame(!bIsVisible);
+}
+
+void ACannon::AddAmmo()
+{
+	ShotsLeft = 0;
+	NumAmmo = MaxAmmo;
+	bIsReadyToFire = true;
+}

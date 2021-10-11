@@ -43,9 +43,6 @@ void ATankPawn::BeginPlay()
 	Super::BeginPlay();
 
 	SetupCannon(DefaultCannonClass);
-
-
-	Cannons.Add(DefaultCannonClass);
 }
 
 // Called every frame
@@ -88,53 +85,61 @@ void ATankPawn::SetTurretTargetPosition(const FVector& TargetPosition)
 
 void ATankPawn::Fire()
 {
-	if (Cannon)
+	if (FirstCannon)
 	{
-		Cannon->Fire();
+		FirstCannon->Fire();
 	}
 }
 
 void ATankPawn::FireSpecial()
 {
-	if (Cannon)
+	if (FirstCannon)
 	{
-		Cannon->FireSpecial();
+		FirstCannon->FireSpecial();
 	}
 }
 
 void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass)
 {
-	if (Cannon)
+	if (FirstCannon)
 	{
-		Cannon->Destroy();
+		FirstCannon->Destroy();
 	}
-
-	FActorSpawnParameters Params;
-	Params.Instigator = this;
-	Params.Owner = this;
-	Cannon = GetWorld()->SpawnActor<ACannon>(InCannonClass, Params);
-	Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-	if (Cannons.Num() < 2)
+	if (InCannonClass)
 	{
-		Cannons.Add(InCannonClass);
-	}
-	else
-	{
-		Cannons[CannonsaActiveIndex] = InCannonClass;
+		FActorSpawnParameters Params;
+		Params.Instigator = this;
+		Params.Owner = this;
+		FirstCannon = GetWorld()->SpawnActor<ACannon>(InCannonClass, Params);
+		FirstCannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	}
 }
 
 void ATankPawn::ChangeWeapon()
 {
-	if (CannonsaActiveIndex < 2)
+	Swap(FirstCannon, SecondCannon);
+	if (FirstCannon)
 	{
-		++CannonsaActiveIndex;
-		SetupCannon(Cannons[CannonsaActiveIndex]);
+		FirstCannon->SetVisibility(true);
+	}
 
-	}
-	else
+	if (SecondCannon)
 	{
-		SetupCannon(Cannons[0]);
-		CannonsaActiveIndex = 0;
+		SecondCannon->SetVisibility(false);
 	}
+}
+
+ACannon* ATankPawn::GetFirstCannon() const
+{
+	return FirstCannon;
+}
+
+void ATankPawn::AddAmmo()
+{
+	
+	if (FirstCannon)
+	{
+		FirstCannon->AddAmmo();
+	}
+
 }
