@@ -43,6 +43,9 @@ void ATankPawn::BeginPlay()
 	Super::BeginPlay();
 
 	SetupCannon(DefaultCannonClass);
+
+
+	Cannons.Add(DefaultCannonClass);
 }
 
 // Called every frame
@@ -106,12 +109,32 @@ void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass)
 		Cannon->Destroy();
 	}
 
-	if (InCannonClass)
+	FActorSpawnParameters Params;
+	Params.Instigator = this;
+	Params.Owner = this;
+	Cannon = GetWorld()->SpawnActor<ACannon>(InCannonClass, Params);
+	Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	if (Cannons.Num() < 2)
 	{
-		FActorSpawnParameters Params;
-		Params.Instigator = this;
-		Params.Owner = this;
-		Cannon = GetWorld()->SpawnActor<ACannon>(InCannonClass, Params);
-		Cannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		Cannons.Add(InCannonClass);
+	}
+	else
+	{
+		Cannons[CannonsaActiveIndex] = InCannonClass;
+	}
+}
+
+void ATankPawn::ChangeWeapon()
+{
+	if (CannonsaActiveIndex < 2)
+	{
+		++CannonsaActiveIndex;
+		SetupCannon(Cannons[CannonsaActiveIndex]);
+
+	}
+	else
+	{
+		SetupCannon(Cannons[0]);
+		CannonsaActiveIndex = 0;
 	}
 }

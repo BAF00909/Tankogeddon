@@ -20,6 +20,7 @@ void ATankPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("RotateRight", this, &ATankPlayerController::RotateRight);
 	InputComponent->BindAction("Fire", IE_Pressed, this, &ATankPlayerController::Fire);
 	InputComponent->BindAction("FireSpecial", IE_Pressed, this, &ATankPlayerController::FireSpecial);
+	InputComponent->BindAction("ChangeWeapon", IE_Pressed, this, &ATankPlayerController::ChangeWeapon);
 }
 
 void ATankPlayerController::Tick(float DeltaSeconds)
@@ -40,6 +41,14 @@ void ATankPlayerController::Tick(float DeltaSeconds)
 	FVector TurretTargetPosition = TankPawn->GetActorLocation() + TargetTurretDirection * 1000.f;
 	//DrawDebugLine(GetWorld(), TankPawn->GetActorLocation(), TurretTargetPosition, FColor::Green, false, 0.1f, 0, 5.f);
 	TankPawn->SetTurretTargetPosition(TurretTargetPosition);
+}
+
+void ATankPlayerController::ChangeWeapon()
+{
+	if (TankPawn)
+	{
+		TankPawn->ChangeWeapon();
+	}
 }
 
 void ATankPlayerController::MoveForward(float InAxisValue)

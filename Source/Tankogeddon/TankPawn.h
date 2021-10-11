@@ -17,37 +17,47 @@ public:
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
-		class UStaticMeshComponent* BodyMesh;
+	class UStaticMeshComponent* BodyMesh;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
-		class UStaticMeshComponent* TurretMesh;
+	class UStaticMeshComponent* TurretMesh;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		class USpringArmComponent* SpringArm;
+	class USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		class UCameraComponent* Camera;
+	class UCameraComponent* Camera;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		class UArrowComponent* CannonSpawnPoint;
+	class UArrowComponent* CannonSpawnPoint;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
-		float MoveSpeed = 100.f;
+	float MoveSpeed = 100.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
-		float RotationSpeed = 100.f;
+	float RotationSpeed = 100.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-		float MovementSmootheness = 0.5f;
+	float MovementSmootheness = 0.5f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-		float RotationSmootheness = 0.5f;
+	float RotationSmootheness = 0.5f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
-		float TurretRotationSmootheness = 0.5f;
+	float TurretRotationSmootheness = 0.5f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
-		TSubclassOf<class ACannon> DefaultCannonClass;
+	TSubclassOf<class ACannon> DefaultCannonClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|SecondCanon")
+	int32 CannonsaActiveIndex = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|SecondCanon")
+	TArray<TSubclassOf<class ACannon>> Cannons;
+	
+
+	UPROPERTY()
+	bool SelectedCannon = true;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -57,22 +67,26 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
-		void MoveForward(float InAxisValue);
+	void MoveForward(float InAxisValue);
 
 	UFUNCTION(BlueprintCallable, Category = "Movement")
-		void RotateRight(float InAxisValue);
+	void RotateRight(float InAxisValue);
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
-		void SetTurretTargetPosition(const FVector& TargetPosition);
+	void SetTurretTargetPosition(const FVector& TargetPosition);
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
-		void Fire();
+	void Fire();
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
-		void FireSpecial();
+	void FireSpecial();
 
 	UFUNCTION(BlueprintCallable, Category = "Turret")
-		void SetupCannon(TSubclassOf<class ACannon> InCannonClass);
+	void SetupCannon(TSubclassOf<class ACannon> InCannonClass);
+
+
+	UFUNCTION()
+	void ChangeWeapon();
 
 private:
 	UPROPERTY()
