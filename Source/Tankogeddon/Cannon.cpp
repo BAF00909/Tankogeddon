@@ -8,6 +8,7 @@
 #include "Tankogeddon.h"
 #include "Projectile.h"
 #include "DrawDebugHelpers.h"
+#include "Bomb.h"
 
 // Sets default values
 ACannon::ACannon()
@@ -112,6 +113,15 @@ void ACannon::Shot()
 		if (Projectile)
 		{
 			Projectile->Start();
+		}
+	}
+	else if (Type == ECannonType::FireBomb) 
+	{
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 1, FColor::Green, TEXT("Fire - bomb"));
+		ABomb* Bomb = GetWorld()->SpawnActor<ABomb>(BombClass, ProjectileSpawnPoint->GetComponentLocation(), ProjectileSpawnPoint->GetComponentRotation());
+		if (Bomb)
+		{
+			Bomb->Start();
 		}
 	}
 	else

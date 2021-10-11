@@ -1,36 +1,35 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Projectile.h"
-#include "Components/SceneComponent.h"
+#include "Bomb.h"
 #include "Components/StaticMeshComponent.h"
 #include "Tankogeddon.h"
 
 // Sets default values
-AProjectile::AProjectile()
+ABomb::ABomb()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.TickInterval = 0.005f;
-
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComponent);
-	Mesh->OnComponentHit.AddDynamic(this, &AProjectile::OnMeshHit);
+	Mesh->OnComponentHit.AddDynamic(this, &ABomb::OnMeshHit);
 	RootComponent = Mesh;
+
 }
 
-void AProjectile::Start()
+void ABomb::Start()
 {
 	StartPosition = GetActorLocation();
 }
 
 // Called every frame
-void AProjectile::Tick(float DeltaTime)
+void ABomb::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector NextPosition = GetActorLocation() + GetActorForwardVector() * MoveSpeed * DeltaTime;
-	SetActorLocation(NextPosition, true);
+	FVector MoveLocation = GetActorLocation() + GetActorForwardVector() * MoveSpeed * DeltaTime;;
+	SetActorLocation(MoveLocation, true);
 
 	if (FVector::Dist(GetActorLocation(), StartPosition) > FireRange)
 	{
@@ -38,7 +37,7 @@ void AProjectile::Tick(float DeltaTime)
 	}
 }
 
-void AProjectile::OnMeshHit(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& HitResult)
+void ABomb::OnMeshHit(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& HitResult)
 {
 	UE_LOG(LogTankogeddon, Warning, TEXT("Projectile %s collided with %s. "), *GetName(), *OtherActor->GetName());
 
@@ -48,3 +47,4 @@ void AProjectile::OnMeshHit(class UPrimitiveComponent* OverlappedComp, class AAc
 	}
 	Destroy();
 }
+
