@@ -6,29 +6,27 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-class ATankPawn;
 /**
- * 
+ *
  */
 UCLASS()
 class TANKOGEDDON_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-protected:
-	UPROPERTY()
-		ATankPawn* TankPawn;
-	UPROPERTY()
-	FVector MousePos;
 public:
-	ATankPlayerController();
+	virtual void BeginPlay() override;
+
+	// Called to bind functionality to input
 	virtual void SetupInputComponent() override;
 	virtual void Tick(float DeltaSeconds) override;
-	FVector GetMousePos();
-protected:
-	virtual void BeginPlay() override;
-	void MoveForward(float AxisValue);
-	void RotateRight(float AxisValue);
+
+private:
+	void MoveForward(float InAxisValue);
+	void RotateRight(float InAxisValue);
 	void Fire();
-	
+	void FireSpecial();
+
+	UPROPERTY()
+		class ATankPawn* TankPawn;
 };

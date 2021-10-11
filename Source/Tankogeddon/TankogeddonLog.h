@@ -1,2 +1,0 @@
-﻿DECLARE_LOG_CATEGORY_EXTERN(TankogeddonLog, All, All);
-DEFINE_LOG_CATEGORY(TankogeddonLog);

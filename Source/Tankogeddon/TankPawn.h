@@ -3,77 +3,85 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TankPlayerController.h"
-#include "Components/ArrowComponent.h"
 #include "GameFramework/Pawn.h"
 #include "TankPawn.generated.h"
-
-class UStaticMeshComponent;
-class UCameraComponent;
-class USpringArmComponent;
-class ATankPlayerController;
-class ACannon;
-
 
 UCLASS()
 class TANKOGEDDON_API ATankPawn : public APawn
 {
 	GENERATED_BODY()
 
-protected:
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		UStaticMeshComponent* BodyMesh;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		UStaticMeshComponent* TurretMesh;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		USpringArmComponent* SpringArm;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		UCameraComponent* Camera;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="components")
-		UArrowComponent* CannonSetupPoint;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
-		float MoveSpeed = 100.f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
-		float RotationSpeed = 100.f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
-		float InterpolationKey = 0.1f;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|Speed")
-		float TurretRotationInterPolationKey = 0.5f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Turret|Cannon")
-		TSubclassOf<ACannon> CannonClass;
-	UPROPERTY()
-		ACannon* Cannon;
-	UPROPERTY()
-		ATankPlayerController* TankController;
-
-	float TargetForwardAxisValue = 0.f;
-	float TargetRotateRightAxisValue = 0.f;
-	float CurrentRightAxisValue = 0.f;
-
-
 public:
 	// Sets default values for this pawn's properties
 	ATankPawn();
 
-	UFUNCTION()
-		void MoveForward(float AxisValue);
-	UFUNCTION()
-		void RotateRight(float AxisValue);
-	UFUNCTION()
-		void Fire();
-
 protected:
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
+		class UStaticMeshComponent* BodyMesh;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
+		class UStaticMeshComponent* TurretMesh;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+		class USpringArmComponent* SpringArm;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+		class UCameraComponent* Camera;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+		class UArrowComponent* CannonSpawnPoint;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
+		float MoveSpeed = 100.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
+		float RotationSpeed = 100.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+		float MovementSmootheness = 0.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+		float RotationSmootheness = 0.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
+		float TurretRotationSmootheness = 0.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
+		TSubclassOf<class ACannon> DefaultCannonClass;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void SetupCannon();
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+		void MoveForward(float InAxisValue);
 
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+		void RotateRight(float InAxisValue);
+
+	UFUNCTION(BlueprintCallable, Category = "Turret")
+		void SetTurretTargetPosition(const FVector& TargetPosition);
+
+	UFUNCTION(BlueprintCallable, Category = "Turret")
+		void Fire();
+
+	UFUNCTION(BlueprintCallable, Category = "Turret")
+		void FireSpecial();
+
+	UFUNCTION(BlueprintCallable, Category = "Turret")
+		void SetupCannon(TSubclassOf<class ACannon> InCannonClass);
+
+private:
+	UPROPERTY()
+		class ACannon* Cannon = nullptr;
+
+	float CurrentMoveForwardAxis = 0.f;
+	float TargetMoveForwardAxis = 0.f;
+	float CurrentRotateRightAxis = 0.f;
+	float TargetRotateRightAxis = 0.f;
+
+	FVector TurretTargetPosition;
 };
