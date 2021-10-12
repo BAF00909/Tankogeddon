@@ -13,17 +13,17 @@ class TANKOGEDDON_API AProjectile : public AActor
 
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-		class UStaticMeshComponent* Mesh;
+	class UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-		float MoveSpeed = 100.f;
+	float MoveSpeed = 100.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
-		float FireRange = 1000.f;
+	float FireRange = 1000.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Damage")
-		float Damage = 1.f;
-
+	float Damage = 1.f;
+	
 
 public:
 	AProjectile();

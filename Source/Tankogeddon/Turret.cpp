@@ -9,6 +9,7 @@
 #include "TimerManager.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
+#include "Tankogeddon.h"
 
 // Sets default values
 ATurret::ATurret()
@@ -101,3 +102,8 @@ void ATurret::Fire()
 		Cannon->Fire();
 	}
 };
+
+void ATurret::TakeDamage(FDamageData DamageData)
+{
+	UE_LOG(LogTankogeddon, Warning, TEXT("Turret %s take damage: %f"), *GetName(), DamageData.DamageValue);
+}

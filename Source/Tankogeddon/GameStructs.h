@@ -16,3 +16,18 @@ enum class ECannonType : uint8 {
 	FireBomb = 2 UMETA(DisplayName = "Use bomb"),
 };
 
+USTRUCT()
+struct FDamageData
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	float DamageValue;
+
+	UPROPERTY()
+	AActor* Instigator;
+
+	UPROPERTY()
+	AActor* DamageMaker;
+};
+

@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "DamageTaker.h"
 #include "Turret.generated.h"
 
 UCLASS()
-class TANKOGEDDON_API ATurret : public AActor
+class TANKOGEDDON_API ATurret : public AActor, public IDamageTaker
 {
 	GENERATED_BODY()
 	
@@ -29,6 +30,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void TakeDamage(FDamageData DamageData);
 
 protected:
 
