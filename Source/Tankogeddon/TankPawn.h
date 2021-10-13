@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "GameStructs.h"
+#include "DamageTaker.h"
+#include "HealthComponent.h"
+#include "Components/BoxComponent.h"
 #include "TankPawn.generated.h"
 
 UCLASS()
@@ -48,6 +52,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
 	TSubclassOf<class ACannon> DefaultCannonClass;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Components")
+	UHealthComponent* HealthComponent;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Components")
+	UBoxComponent* HitCollider;
 	
 
 	UPROPERTY()
@@ -55,6 +65,9 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+
+
 
 public:
 	// Called every frame
@@ -93,13 +106,25 @@ public:
 	UFUNCTION()
 	void AddAmmo();
 
+	UFUNCTION()
+	void TakeDamage(FDamageData DamageData);
+
+	UFUNCTION()
+	void Die();
+
+	UFUNCTION()
+	void DamageTaked(float DamageValue);
+
 private:
 	UPROPERTY()
 	class ACannon* Cannon = nullptr;
 
 	float CurrentMoveForwardAxis = 0.f;
+
 	float TargetMoveForwardAxis = 0.f;
+
 	float CurrentRotateRightAxis = 0.f;
+
 	float TargetRotateRightAxis = 0.f;
 
 	FVector TurretTargetPosition;

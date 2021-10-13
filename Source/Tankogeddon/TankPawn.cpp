@@ -35,6 +35,14 @@ ATankPawn::ATankPawn()
 
 	CannonSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Spawn point"));
 	CannonSpawnPoint->SetupAttachment(TurretMesh);
+
+	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Hit collider"));
+	HitCollider->SetupAttachment(BodyMesh);
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health component"));
+	HealthComponent->onDie.AddUObject(this, &ATankPawn::Die);
+	HealthComponent->onDamaged.AddUObject(this, &ATankPawn::DamageTaked);
+
 }
 
 // Called when the game starts or when spawned
@@ -142,4 +150,19 @@ void ATankPawn::AddAmmo()
 		FirstCannon->AddAmmo();
 	}
 
+}
+
+void ATankPawn::TakeDamage(FDamageData DamageData)
+{
+	HealthComponent->TankDamage(DamageData);
+}
+
+void ATankPawn::Die()
+{
+	Destroy();
+}
+
+void ATankPawn::DamageTaked(float DamageValue)
+{
+	UE_LOG(LogTankogeddon, Warning, TEXT("Tank %s taked damage:%f Health:%f"), *GetName(), DamageValue, HealthComponent->GetHealth());
 }
