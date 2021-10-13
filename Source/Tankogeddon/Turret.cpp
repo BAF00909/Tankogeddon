@@ -27,6 +27,10 @@ ATurret::ATurret()
 
 	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Hit collider"));
 	HitCollider->SetupAttachment(BodyMesh);
+
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health component"));
+	HealthComponent->onDie.AddUObject(this, &ATurret::Die);
+	HealthComponent->onDamaged.AddUObject(this, &ATurret::DamageTaked);
 }
 
 // Called when the game starts or when spawned
@@ -103,7 +107,18 @@ void ATurret::Fire()
 	}
 };
 
+void ATurret::Die()
+{
+	Destroy();
+}
+
 void ATurret::TakeDamage(FDamageData DamageData)
 {
 	UE_LOG(LogTankogeddon, Warning, TEXT("Turret %s take damage: %f"), *GetName(), DamageData.DamageValue);
+	HealthComponent->TankDamage(DamageData);
+}
+
+void ATurret::DamageTaked(float DamageValue)
+{
+	UE_LOG(LogTankogeddon, Warning, TEXT("Turret %s taked damage:%f Health:%f"), *GetName(), DamageValue, HealthComponent->GetHealth());
 }

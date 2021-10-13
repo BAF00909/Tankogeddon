@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "DamageTaker.h"
+#include "HealthComponent.h"
 #include "Turret.generated.h"
 
 UCLASS()
@@ -33,6 +34,12 @@ public:
 
 	UFUNCTION()
 	void TakeDamage(FDamageData DamageData);
+
+	UFUNCTION()
+	void Die();
+
+	UFUNCTION()
+	void DamageTaked(float DamageValue);
 
 protected:
 
@@ -68,5 +75,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Target")
 	float Accurency = 10.0f;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Components")
+	UHealthComponent* HealthComponent;
 	
 };

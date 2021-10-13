@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameStructs.h"
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
@@ -12,6 +13,9 @@ class TANKOGEDDON_API UHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+	DECLARE_EVENT(UHealthComponent, FOnDie)
+	DECLARE_EVENT_OneParam(UHealthComponent, FOnHealthChanged, float)
+
 public:	
 	// Sets default values for this component's properties
 	UHealthComponent();
@@ -20,9 +24,19 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Health values")
+	float MaxHealth = 10;
 
-		
+	UPROPERTY()
+	float CurrentHealth;
+
+public:	
+
+	FOnDie onDie;
+	FOnHealthChanged onDamaged;
+
+	void TankDamage(FDamageData DamageData);
+	float GetHealth() const;
+	float GetHealthState() const;
+	void AddHealth(float AddiditionalHealthValue);
 };
