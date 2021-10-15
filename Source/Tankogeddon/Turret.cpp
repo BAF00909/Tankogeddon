@@ -2,35 +2,32 @@
 
 
 #include "Turret.h"
-#include "Components/StaticMeshComponent.h"
 #include "TankPlayerController.h"
 #include "Cannon.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "TimerManager.h"
-#include "Components/ArrowComponent.h"
-#include "Components/BoxComponent.h"
-#include "Tankogeddon.h"
+#include "MilitaryEquipment.h"
 
 // Sets default values
 ATurret::ATurret()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
-	RootComponent = BodyMesh;
+	//PrimaryActorTick.bCanEverTick = true;
+	//BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
+	//RootComponent = BodyMesh;
 
-	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretMesh"));
+	/*TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretMesh"));
 	TurretMesh->AttachToComponent(BodyMesh, FAttachmentTransformRules::KeepRelativeTransform);
 
 	CannonSetupPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
 	CannonSetupPoint->AttachToComponent(TurretMesh, FAttachmentTransformRules::KeepRelativeTransform);
 
 	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Hit collider"));
-	HitCollider->SetupAttachment(BodyMesh);
+	HitCollider->SetupAttachment(BodyMesh);*/
 
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health component"));
+	/*HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health component"));
 	HealthComponent->onDie.AddUObject(this, &ATurret::Die);
-	HealthComponent->onDamaged.AddUObject(this, &ATurret::DamageTaked);
+	HealthComponent->onDamaged.AddUObject(this, &ATurret::DamageTaked);*/
 }
 
 // Called when the game starts or when spawned
@@ -38,13 +35,7 @@ void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	FActorSpawnParameters Params;
-	Params.Owner = this;
-	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, Params);
-	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-
 	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
-
 	FTimerHandle TargetingTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TargetingTimerHandle, this, &ATurret::Targeting, TargetingRate, true, TargetingRate);
 }
@@ -53,7 +44,6 @@ void ATurret::BeginPlay()
 void ATurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ATurret::Destroyed() 
@@ -107,18 +97,18 @@ void ATurret::Fire()
 	}
 };
 
-void ATurret::Die()
-{
-	Destroy();
-}
-
-void ATurret::TakeDamage(FDamageData DamageData)
-{
-	UE_LOG(LogTankogeddon, Warning, TEXT("Turret %s take damage: %f"), *GetName(), DamageData.DamageValue);
-	HealthComponent->TankDamage(DamageData);
-}
-
-void ATurret::DamageTaked(float DamageValue)
-{
-	UE_LOG(LogTankogeddon, Warning, TEXT("Turret %s taked damage:%f Health:%f"), *GetName(), DamageValue, HealthComponent->GetHealth());
-}
+//void ATurret::Die()
+//{
+//	Destroy();
+//}
+//
+//void ATurret::TakeDamage(FDamageData DamageData)
+//{
+//	UE_LOG(LogTankogeddon, Warning, TEXT("Turret %s take damage: %f"), *GetName(), DamageData.DamageValue);
+//	HealthComponent->TankDamage(DamageData);
+//}
+//
+//void ATurret::DamageTaked(float DamageValue)
+//{
+//	UE_LOG(LogTankogeddon, Warning, TEXT("Turret %s taked damage:%f Health:%f"), *GetName(), DamageValue, HealthComponent->GetHealth());
+//}

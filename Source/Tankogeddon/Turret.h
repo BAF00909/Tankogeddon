@@ -6,10 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "DamageTaker.h"
 #include "HealthComponent.h"
+#include "MilitaryEquipment.h"
 #include "Turret.generated.h"
 
 UCLASS()
-class TANKOGEDDON_API ATurret : public AActor, public IDamageTaker
+class TANKOGEDDON_API ATurret : public AMilitaryEquipment
 {
 	GENERATED_BODY()
 	
@@ -32,34 +33,37 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
+	/*UFUNCTION()
 	void TakeDamage(FDamageData DamageData);
 
 	UFUNCTION()
 	void Die();
 
 	UFUNCTION()
-	void DamageTaked(float DamageValue);
+	void DamageTaked(float DamageValue);*/
 
 protected:
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category ="Components")
-	class UStaticMeshComponent* BodyMesh;
+	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category ="Components")
+	//class UStaticMeshComponent* BodyMesh;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UStaticMeshComponent* TurretMesh;
+	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	//class UStaticMeshComponent* TurretMesh;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UArrowComponent* CannonSetupPoint;
+	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	//class UArrowComponent* CannonSetupPoint;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UBoxComponent* HitCollider;
+	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	//class UBoxComponent* HitCollider;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
-	TSubclassOf<class ACannon> CannonClass;
+	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	//UHealthComponent* HealthComponent;
 
-	UPROPERTY()
-	class ACannon* Cannon;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
+	//TSubclassOf<class ACannon> CannonClass;
+
+	//UPROPERTY()
+	//class ACannon* Cannon;
 
 	UPROPERTY()
 	class APawn* PlayerPawn;
@@ -75,8 +79,4 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Target")
 	float Accurency = 10.0f;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Components")
-	UHealthComponent* HealthComponent;
-	
 };

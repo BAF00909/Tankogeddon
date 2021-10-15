@@ -2,8 +2,10 @@
 
 
 #include "TankPawn.h"
-#include <Components/StaticMeshComponent.h>
+
 #include <GameFramework/SpringArmComponent.h>
+#include "Components/StaticMeshComponent.h"
+#include "Components/BoxComponent.h"
 #include <Camera/CameraComponent.h>
 #include "Math/UnrealMathUtility.h"
 #include "Tankogeddon.h"

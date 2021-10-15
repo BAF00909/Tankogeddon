@@ -7,7 +7,7 @@
 #include "GameStructs.h"
 #include "DamageTaker.h"
 #include "HealthComponent.h"
-#include "Components/BoxComponent.h"
+#include "MilitaryEquipment.h"
 #include "TankPawn.generated.h"
 
 UCLASS()
@@ -57,7 +57,7 @@ protected:
 	UHealthComponent* HealthComponent;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Components")
-	UBoxComponent* HitCollider;
+	class UBoxComponent* HitCollider;
 	
 
 	UPROPERTY()
