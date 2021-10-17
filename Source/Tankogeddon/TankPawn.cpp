@@ -2,7 +2,7 @@
 
 
 #include "TankPawn.h"
-#include <Components/StaticMeshComponent.h>
+
 #include <GameFramework/SpringArmComponent.h>
 #include <Camera/CameraComponent.h>
 #include "Math/UnrealMathUtility.h"
@@ -15,13 +15,6 @@
 ATankPawn::ATankPawn()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
-	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank body"));
-	RootComponent = BodyMesh;
-
-	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank turret"));
-	TurretMesh->SetupAttachment(BodyMesh);
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring arm"));
 	SpringArm->SetupAttachment(BodyMesh);
@@ -33,8 +26,6 @@ ATankPawn::ATankPawn()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
-	CannonSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Spawn point"));
-	CannonSpawnPoint->SetupAttachment(TurretMesh);
 }
 
 // Called when the game starts or when spawned
@@ -111,7 +102,7 @@ void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass)
 		Params.Instigator = this;
 		Params.Owner = this;
 		FirstCannon = GetWorld()->SpawnActor<ACannon>(InCannonClass, Params);
-		FirstCannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		FirstCannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	}
 }
 

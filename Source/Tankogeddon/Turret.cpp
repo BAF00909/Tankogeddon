@@ -1,0 +1,78 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Turret.h"
+#include "TankPlayerController.h"
+#include "Cannon.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "TimerManager.h"
+#include "MilitaryEquipment.h"
+#include "Components/ArrowComponent.h"
+
+// Sets default values
+ATurret::ATurret(){}
+
+// Called when the game starts or when spawned
+void ATurret::BeginPlay()
+{
+	Super::BeginPlay();
+
+	FActorSpawnParameters Params;
+	Params.Owner = this;
+	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, Params);
+	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+	FTimerHandle TargetingTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TargetingTimerHandle, this, &ATurret::Targeting, TargetingRate, true, TargetingRate);
+}
+
+void ATurret::Destroyed() 
+{
+	if (Cannon)
+	{
+		Cannon->Destroy();
+	}
+};
+
+void ATurret::Targeting() 
+{
+	if (IsPlayerInRange())
+	{
+		RotateToPlayer();
+	}
+
+	if (CanFire() && Cannon && Cannon->IsReadyToFire())
+	{
+		Fire();
+	}
+};
+
+void ATurret::RotateToPlayer() 
+{
+	FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), PlayerPawn->GetActorLocation());
+	FRotator CurrentRotation = TurretMesh->GetComponentRotation();
+	TargetRotation.Pitch = CurrentRotation.Pitch;
+	TargetRotation.Roll = CurrentRotation.Roll;
+	TurretMesh->SetWorldRotation(FMath::RInterpConstantTo(CurrentRotation, TargetRotation, GetWorld()->GetDeltaSeconds(), TargetingSpeed));
+};
+
+bool ATurret::IsPlayerInRange() 
+{
+	return FVector::Distance(PlayerPawn->GetActorLocation(), GetActorLocation()) <= TargetingRange;
+};
+
+bool ATurret::CanFire() 
+{
+	FVector TargetingDir = TurretMesh->GetForwardVector();
+	FVector DirToPlayer = PlayerPawn->GetActorLocation() - GetActorLocation();
+	DirToPlayer.Normalize();
+	float DirAngle = FMath::RadiansToDegrees(acosf(FVector::DotProduct(TargetingDir,DirToPlayer)));
+	return DirAngle <= Accurency;
+};
+void ATurret::Fire() 
+{
+	if (Cannon)
+	{
+		Cannon->Fire();
+	}
+};

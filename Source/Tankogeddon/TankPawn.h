@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "GameStructs.h"
+#include "DamageTaker.h"
+#include "HealthComponent.h"
+#include "MilitaryEquipment.h"
 #include "TankPawn.generated.h"
 
 UCLASS()
-class TANKOGEDDON_API ATankPawn : public APawn
+class TANKOGEDDON_API ATankPawn : public AMilitaryEquipment
 {
 	GENERATED_BODY()
 
@@ -16,20 +20,12 @@ public:
 	ATankPawn();
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
-	class UStaticMeshComponent* BodyMesh;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
-	class UStaticMeshComponent* TurretMesh;
-
+	
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UCameraComponent* Camera;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UArrowComponent* CannonSpawnPoint;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
 	float MoveSpeed = 100.f;
@@ -48,6 +44,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
 	TSubclassOf<class ACannon> DefaultCannonClass;
+
 	
 
 	UPROPERTY()
@@ -55,6 +52,9 @@ protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+
+
 
 public:
 	// Called every frame
@@ -94,12 +94,13 @@ public:
 	void AddAmmo();
 
 private:
-	UPROPERTY()
-	class ACannon* Cannon = nullptr;
 
 	float CurrentMoveForwardAxis = 0.f;
+
 	float TargetMoveForwardAxis = 0.f;
+
 	float CurrentRotateRightAxis = 0.f;
+
 	float TargetRotateRightAxis = 0.f;
 
 	FVector TurretTargetPosition;

@@ -49,6 +49,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (EditCondition = "Type == ECannonType::FireBomb", EditConditionHides), Category = "Fire params")
 	TSubclassOf<class ABomb> BombClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+	float LaserDamage = 2.0f;
+
 private:
 	FTimerHandle ReloadTimerHandle;
 	FTimerHandle SeriesTimerHandle;
