@@ -3,46 +3,78 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameStructs.h"
-#include "Components/ArrowComponent.h"
 #include "GameFramework/Actor.h"
+#include "GameStructs.h"
 #include "Cannon.generated.h"
 
 UCLASS()
 class TANKOGEDDON_API ACannon : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	ACannon();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Components")
-	UStaticMeshComponent* CannonMesh;
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="components")
-	UArrowComponent* ProjectileSpawnPoint;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Fire params")
-	float FireRate = 1;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Fire params")
-	float FireRange = 1000;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Fire params")
-	float FireDamage = 1;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Fire params")
-	ECannonType CannonType = ECannonType::FireProjectile;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UStaticMeshComponent* Mesh;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UArrowComponent* ProjectileSpawnPoint;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+	float FireRate = 1.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (EditCondition = "Type == ECannonType::FireTrace", EditConditionHides), Category = "Fire params")
+	float FireRange = 1000.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (EditCondition = "Type == ECannonType::FireTrace", EditConditionHides), Category = "Fire params")
+	float FireDamage = 1.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+	bool bHasSpecialFire = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+	int32 MaxAmmo = 10;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = 1), Category = "Fire params")
+	int32 NumShotsInSeries = 1;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (EditCondition = "NumShotsInSeries > 1", EditConditionHides), Category = "Fire params")
+	float SeriesLength = 1.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
+	ECannonType Type = ECannonType::FireProjectile;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (EditCondition = "Type == ECannonType::FireProjectile", EditConditionHides), Category = "Fire params")
+	TSubclassOf<class AProjectile> ProjectileClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (EditCondition = "Type == ECannonType::FireBomb", EditConditionHides), Category = "Fire params")
+	TSubclassOf<class ABomb> BombClass;
+
+private:
 	FTimerHandle ReloadTimerHandle;
-	bool bReadyToFire = false;
+	FTimerHandle SeriesTimerHandle;
+	bool bIsReadyToFire = false;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+public:
+	ACannon();
+
 	void Fire();
+	void FireSpecial();
+
 	bool IsReadyToFire();
+	bool HasSpecialFire() const;
 
-	protected:
+	void SetVisibility(bool bIsVisible);
+
+	UFUNCTION()
+	void AddAmmo();
+
+protected:
+	virtual void BeginPlay() override;
+	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
+
 	void Reload();
+	void Shot();
 
+	int32 NumAmmo = 0;
+	int32 ShotsLeft = 0;
 };
