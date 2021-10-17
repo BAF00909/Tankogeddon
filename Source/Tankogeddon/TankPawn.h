@@ -45,6 +45,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
 	TSubclassOf<class ACannon> DefaultCannonClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params| Patrol points", meta = (MakeEditWidget = true))
+	TArray<FVector> PartollPoints;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI|Move params| Accurency")
+	float MovementAccurency = 50;
+
 	
 
 	UPROPERTY()
@@ -88,10 +94,31 @@ public:
 	class ACannon* GetFirstCannon() const;
 
 	UFUNCTION()
+	TArray<FVector> GetPatrollingPoints()
+	{
+		return PartollPoints;
+	}
+
+	UFUNCTION()
+	float GetMovementAccurency()
+	{
+		return MovementAccurency;
+	}
+
+	UFUNCTION()
 	void ChangeWeapon();
 
 	UFUNCTION()
 	void AddAmmo();
+
+	UFUNCTION()
+	FVector GetTurretForwardVector();
+
+	UFUNCTION()
+	void RotateTurretTo(FVector TargetPosition);
+
+	FVector GetEyesPosition();
+
 
 private:
 

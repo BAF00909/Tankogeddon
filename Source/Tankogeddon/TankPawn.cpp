@@ -52,11 +52,8 @@ void ATankPawn::Tick(float DeltaTime)
 
 	UE_LOG(LogTankogeddon, Verbose, TEXT("CurrentRotateRightAxis: %f"), CurrentRotateRightAxis);
 
-	FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TurretTargetPosition);
-	FRotator CurrentRotation = TurretMesh->GetComponentRotation();
-	TargetRotation.Roll = CurrentRotation.Roll;
-	TargetRotation.Pitch = CurrentRotation.Pitch;
-	TurretMesh->SetWorldRotation(FMath::RInterpConstantTo(CurrentRotation, TargetRotation, DeltaTime, TurretRotationSmootheness));
+	RotateTurretTo(TurretTargetPosition);
+
 }
 
 void ATankPawn::MoveForward(float InAxisValue)
@@ -133,4 +130,24 @@ void ATankPawn::AddAmmo()
 		FirstCannon->AddAmmo();
 	}
 
+}
+
+FVector ATankPawn::GetTurretForwardVector()
+{
+	return TurretMesh->GetForwardVector();
+}
+
+void ATankPawn::RotateTurretTo(FVector TargetPosition)
+{
+
+	FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TurretTargetPosition);
+	FRotator CurrentRotation = TurretMesh->GetComponentRotation();
+	TargetRotation.Roll = CurrentRotation.Roll;
+	TargetRotation.Pitch = CurrentRotation.Pitch;
+	TurretMesh->SetWorldRotation(FMath::RInterpConstantTo(CurrentRotation, TargetRotation, GetWorld()->GetTimeSeconds(), TurretRotationSmootheness));
+}
+
+FVector ATankPawn::GetEyesPosition()
+{
+	return CannonSetupPoint->GetComponentLocation();
 }
