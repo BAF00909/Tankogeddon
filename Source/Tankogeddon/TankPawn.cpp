@@ -4,8 +4,6 @@
 #include "TankPawn.h"
 
 #include <GameFramework/SpringArmComponent.h>
-#include "Components/StaticMeshComponent.h"
-#include "Components/BoxComponent.h"
 #include <Camera/CameraComponent.h>
 #include "Math/UnrealMathUtility.h"
 #include "Tankogeddon.h"
@@ -17,13 +15,6 @@
 ATankPawn::ATankPawn()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
-	BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank body"));
-	RootComponent = BodyMesh;
-
-	TurretMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tank turret"));
-	TurretMesh->SetupAttachment(BodyMesh);
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring arm"));
 	SpringArm->SetupAttachment(BodyMesh);
@@ -34,16 +25,6 @@ ATankPawn::ATankPawn()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
-
-	CannonSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Spawn point"));
-	CannonSpawnPoint->SetupAttachment(TurretMesh);
-
-	HitCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Hit collider"));
-	HitCollider->SetupAttachment(BodyMesh);
-
-	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health component"));
-	HealthComponent->onDie.AddUObject(this, &ATankPawn::Die);
-	HealthComponent->onDamaged.AddUObject(this, &ATankPawn::DamageTaked);
 
 }
 
@@ -121,7 +102,7 @@ void ATankPawn::SetupCannon(TSubclassOf<class ACannon> InCannonClass)
 		Params.Instigator = this;
 		Params.Owner = this;
 		FirstCannon = GetWorld()->SpawnActor<ACannon>(InCannonClass, Params);
-		FirstCannon->AttachToComponent(CannonSpawnPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		FirstCannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	}
 }
 
@@ -152,19 +133,4 @@ void ATankPawn::AddAmmo()
 		FirstCannon->AddAmmo();
 	}
 
-}
-
-void ATankPawn::TakeDamage(FDamageData DamageData)
-{
-	HealthComponent->TankDamage(DamageData);
-}
-
-void ATankPawn::Die()
-{
-	Destroy();
-}
-
-void ATankPawn::DamageTaked(float DamageValue)
-{
-	UE_LOG(LogTankogeddon, Warning, TEXT("Tank %s taked damage:%f Health:%f"), *GetName(), DamageValue, HealthComponent->GetHealth());
 }

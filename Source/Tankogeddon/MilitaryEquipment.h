@@ -8,7 +8,7 @@
 #include "MilitaryEquipment.generated.h"
 
 UCLASS()
-class TANKOGEDDON_API AMilitaryEquipment : public AActor, public IDamageTaker
+class TANKOGEDDON_API AMilitaryEquipment : public APawn, public IDamageTaker
 {
 	GENERATED_BODY()
 
@@ -27,9 +27,6 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UHealthComponent* HealthComponent;
-
-	UPROPERTY()
-	class ACannon* Cannon;
 
 	virtual void BeginPlay() override;
 

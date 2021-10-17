@@ -140,12 +140,15 @@ void ACannon::Shot()
 			DrawDebugLine(GetWorld(), TraceStart, HitResult.Location, FColor::Red, false, 0.5f, 0, 5.f);
 			if (HitResult.Actor.IsValid() && HitResult.Component.IsValid(), HitResult.Component->GetCollisionObjectType() == ECC_Destructible)
 			{
-				IDamageTaker* DamageTakerActor = Cast<IDamageTaker>(HitResult.Actor);
-				FDamageData DamageData;
-				DamageData.DamageValue = LaserDamage;
-				DamageData.Instigator = Cast<AActor>(HitResult.Actor);
-				DamageData.DamageMaker = this;
-				DamageTakerActor->TakeDamage(DamageData);
+				if (IDamageTaker* DamageTakerActor = Cast<IDamageTaker>(HitResult.Actor))
+				{
+					FDamageData DamageData;
+					DamageData.DamageValue = LaserDamage;
+					DamageData.Instigator = Cast<AActor>(HitResult.Actor);
+					DamageData.DamageMaker = this;
+					DamageTakerActor->TakeDamage(DamageData);
+				}
+				return;
 			}
 		}
 		else

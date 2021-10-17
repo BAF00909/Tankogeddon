@@ -36,10 +36,6 @@ void AMilitaryEquipment::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FActorSpawnParameters Params;
-	Params.Owner = this;
-	Cannon = GetWorld()->SpawnActor<ACannon>(CannonClass, Params);
-	Cannon->AttachToComponent(CannonSetupPoint, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
 void AMilitaryEquipment::Die()

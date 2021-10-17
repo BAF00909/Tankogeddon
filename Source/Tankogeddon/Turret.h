@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "DamageTaker.h"
-#include "HealthComponent.h"
 #include "MilitaryEquipment.h"
 #include "Turret.generated.h"
 
@@ -19,56 +17,13 @@ public:
 	ATurret();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	virtual void Destroyed() override;
-	void Targeting();
-	void RotateToPlayer();
-	bool IsPlayerInRange();
-	bool CanFire();
-	void Fire();
-
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	/*UFUNCTION()
-	void TakeDamage(FDamageData DamageData);
-
-	UFUNCTION()
-	void Die();
-
-	UFUNCTION()
-	void DamageTaked(float DamageValue);*/
-
-protected:
-
-	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category ="Components")
-	//class UStaticMeshComponent* BodyMesh;
-
-	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	//class UStaticMeshComponent* TurretMesh;
-
-	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	//class UArrowComponent* CannonSetupPoint;
-
-	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	//class UBoxComponent* HitCollider;
-
-	//UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	//UHealthComponent* HealthComponent;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
-	//TSubclassOf<class ACannon> CannonClass;
-
-	//UPROPERTY()
-	//class ACannon* Cannon;
-
 	UPROPERTY()
 	class APawn* PlayerPawn;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Target")
+	UPROPERTY()
+	class ACannon* Cannon = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Target")
 	float TargetingRange = 1000.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Target")
@@ -79,4 +34,14 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Target")
 	float Accurency = 10.0f;
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	virtual void Destroyed() override;
+	void Targeting();
+	void RotateToPlayer();
+	bool IsPlayerInRange();
+	bool CanFire();
+	void Fire();
+
 };

@@ -11,7 +11,7 @@
 #include "TankPawn.generated.h"
 
 UCLASS()
-class TANKOGEDDON_API ATankPawn : public APawn, public IDamageTaker
+class TANKOGEDDON_API ATankPawn : public AMilitaryEquipment
 {
 	GENERATED_BODY()
 
@@ -20,20 +20,12 @@ public:
 	ATankPawn();
 
 protected:
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
-	class UStaticMeshComponent* BodyMesh;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Components")
-	class UStaticMeshComponent* TurretMesh;
-
+	
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class USpringArmComponent* SpringArm;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UCameraComponent* Camera;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
-	class UArrowComponent* CannonSpawnPoint;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
 	float MoveSpeed = 100.f;
@@ -53,11 +45,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret")
 	TSubclassOf<class ACannon> DefaultCannonClass;
 
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Components")
-	UHealthComponent* HealthComponent;
-
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category="Components")
-	class UBoxComponent* HitCollider;
 	
 
 	UPROPERTY()
@@ -106,18 +93,7 @@ public:
 	UFUNCTION()
 	void AddAmmo();
 
-	UFUNCTION()
-	void TakeDamage(FDamageData DamageData);
-
-	UFUNCTION()
-	void Die();
-
-	UFUNCTION()
-	void DamageTaked(float DamageValue);
-
 private:
-	UPROPERTY()
-	class ACannon* Cannon = nullptr;
 
 	float CurrentMoveForwardAxis = 0.f;
 
