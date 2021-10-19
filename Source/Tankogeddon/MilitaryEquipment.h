@@ -32,6 +32,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ammo")
 	TSubclassOf<class ACannon> CannonClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
+	class UParticleSystem* DestuctionParticleSystem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	class USoundBase* DestructionSound;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -45,4 +51,6 @@ public:
 
 	UFUNCTION()
 	void DamageTaked(float DamageValue);
+
+	FVector GetEyesPosition();
 };
