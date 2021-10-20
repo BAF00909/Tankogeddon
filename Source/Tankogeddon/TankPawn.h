@@ -8,6 +8,7 @@
 #include "DamageTaker.h"
 #include "HealthComponent.h"
 #include "MilitaryEquipment.h"
+#include "Engine/TargetPoint.h"
 #include "TankPawn.generated.h"
 
 UCLASS()
@@ -46,7 +47,7 @@ protected:
 	TSubclassOf<class ACannon> DefaultCannonClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params| Patrol points", meta = (MakeEditWidget = true))
-	TArray<FVector> PartollPoints;
+	TArray<class ATargetPoint*> PatrollingPoints;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI|Move params| Accurency")
 	float MovementAccurency = 50;
@@ -96,8 +97,18 @@ public:
 	UFUNCTION()
 	TArray<FVector> GetPatrollingPoints()
 	{
-		return PartollPoints;
+		TArray<FVector> Points;
+		for (ATargetPoint* Point : PatrollingPoints)
+		{
+			Points.Add(Point->GetActorLocation());
+		}
+
+		return Points;
 	}
+
+	UFUNCTION()
+	void SetPatrollingPoints(TArray<class ATargetPoint*> NewPatrollingPoints);
+
 
 	UFUNCTION()
 	float GetMovementAccurency()

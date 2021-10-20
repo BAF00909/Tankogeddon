@@ -27,6 +27,7 @@ protected:
 	TArray<FVector> PatrollingPoints;
 
 	int32 CurrentPatrolPointIndex = 0;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params|Accurency")
 	float MovementAccurency;
 
@@ -58,4 +59,7 @@ protected:
 	bool CanFire();
 
 	void Fire();
+
+	void Initialize();
+
 };
