@@ -16,6 +16,8 @@ public:
 	// Sets default values for this actor's properties
 	ATurret();
 
+	FVector GetEyesPosition();
+
 protected:
 	UPROPERTY()
 	class APawn* PlayerPawn;

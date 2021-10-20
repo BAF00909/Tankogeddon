@@ -8,6 +8,7 @@
 #include "Tankogeddon.h"
 #include "HealthComponent.h"
 #include "Cannon.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMilitaryEquipment::AMilitaryEquipment()
@@ -40,6 +41,8 @@ void AMilitaryEquipment::BeginPlay()
 
 void AMilitaryEquipment::Die()
 {
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DestuctionParticleSystem, GetActorTransform());
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), DestructionSound, GetActorLocation());
 	Destroy();
 }
 
@@ -54,5 +57,8 @@ void AMilitaryEquipment::DamageTaked(float DamageValue)
 	UE_LOG(LogTankogeddon, Warning, TEXT("Turret %s taked damage:%f Health:%f"), *GetName(), DamageValue, HealthComponent->GetHealth());
 }
 
-
+FVector AMilitaryEquipment::GetEyesPosition()
+{
+	return CannonSetupPoint->GetComponentLocation();
+}
 

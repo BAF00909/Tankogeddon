@@ -52,6 +52,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Fire params")
 	float LaserDamage = 2.0f;
 
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UParticleSystemComponent* ShootEffect;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UAudioComponent* AudioEffect;
+
+
 private:
 	FTimerHandle ReloadTimerHandle;
 	FTimerHandle SeriesTimerHandle;

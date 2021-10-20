@@ -8,6 +8,7 @@
 #include "TimerManager.h"
 #include "MilitaryEquipment.h"
 #include "Components/ArrowComponent.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ATurret::ATurret(){}
@@ -58,7 +59,31 @@ void ATurret::RotateToPlayer()
 
 bool ATurret::IsPlayerInRange() 
 {
-	return FVector::Distance(PlayerPawn->GetActorLocation(), GetActorLocation()) <= TargetingRange;
+	if (FVector::DistSquared(PlayerPawn->GetActorLocation(), GetActorLocation()) > FMath::Square(TargetingRange))
+	{
+		return false;
+	}
+
+	FHitResult HitResult;
+	FVector TraceStart = GetActorLocation();
+	FVector TraceEnd = PlayerPawn->GetActorLocation();
+	FCollisionQueryParams TraceParams = FCollisionQueryParams(FName(TEXT("Turret Vission Trace")), true, this);
+	TraceParams.bReturnPhysicalMaterial = false;
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, TraceParams))
+	{
+		DrawDebugLine(GetWorld(), TraceStart, HitResult.Location, FColor::Cyan, false, 0.1f, 0, 5);
+		if (HitResult.Actor == PlayerPawn)
+		{
+			return true;
+		}
+	}
+	else
+	{
+		DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Blue, false, 0.1f, 0, 5);
+	}
+
+	return false;
 };
 
 bool ATurret::CanFire() 
@@ -76,3 +101,9 @@ void ATurret::Fire()
 		Cannon->Fire();
 	}
 };
+
+FVector ATurret::GetEyesPosition()
+{
+	return CannonSetupPoint->GetComponentLocation();
+}
+
