@@ -15,14 +15,14 @@ void ATankAIController::BeginPlay()
 void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 	if(!TankPawn)
 		Initialize();
-	if(!TankPawn)
-		Initialize();
+
 	TankPawn->MoveForward(1);
 
-	float rotationValue = GetRotationgValue();
-	TankPawn->RotateRight(rotationValue);
+	float RotationValue = GetRotationgValue();
+	TankPawn->RotateRight(RotationValue);
 
 	Targeting();
 }

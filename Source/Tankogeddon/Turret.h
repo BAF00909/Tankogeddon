@@ -29,7 +29,7 @@ protected:
 	float TargetingRange = 1000.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Target")
-	float TargetingSpeed = 0.1f;
+	float TargetingSpeed = 50.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Target")
 	float TargetingRate = 0.005f;
@@ -40,6 +40,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
+	virtual void Tick(float DeltaTime) override;
 	void Targeting();
 	void RotateToPlayer();
 	bool IsPlayerInRange();

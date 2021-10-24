@@ -58,9 +58,9 @@ void ATankFactory::SpawnNewTank()
 {
 	FTransform SpawnTransform(TankSpawnPoint->GetComponentRotation(), TankSpawnPoint->GetComponentLocation(), FVector(1));
 	ATankPawn* NewTank = GetWorld()->SpawnActorDeferred<ATankPawn>(SpawnTankClass, SpawnTransform, this, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-	//
+	
 	NewTank->SetPatrollingPoints(TankWayPoints);
-	//
+	
 	UGameplayStatics::FinishSpawningActor(NewTank, SpawnTransform);
 }
 

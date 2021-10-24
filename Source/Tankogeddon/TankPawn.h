@@ -49,7 +49,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params| Patrol points", meta = (MakeEditWidget = true))
 	TArray<class ATargetPoint*> PatrollingPoints;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI|Move params| Accurency")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params| Accurency")
 	float MovementAccurency = 50;
 
 	

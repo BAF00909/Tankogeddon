@@ -27,6 +27,11 @@ void ATurret::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(TargetingTimerHandle, this, &ATurret::Targeting, TargetingRate, true, TargetingRate);
 }
 
+void ATurret::Tick(float DeltaTime)
+{
+	Targeting();
+}
+
 void ATurret::Destroyed() 
 {
 	if (Cannon)
@@ -37,12 +42,12 @@ void ATurret::Destroyed()
 
 void ATurret::Targeting() 
 {
-	if (IsPlayerInRange())
+	
+	if (!IsPlayerInRange())
 	{
 		RotateToPlayer();
 	}
-
-	if (CanFire() && Cannon && Cannon->IsReadyToFire())
+	if (CanFire() && Cannon && Cannon->IsReadyToFire() && IsPlayerInRange())
 	{
 		Fire();
 	}
@@ -52,8 +57,8 @@ void ATurret::RotateToPlayer()
 {
 	FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), PlayerPawn->GetActorLocation());
 	FRotator CurrentRotation = TurretMesh->GetComponentRotation();
-	TargetRotation.Pitch = CurrentRotation.Pitch;
-	TargetRotation.Roll = CurrentRotation.Roll;
+	CurrentRotation.Pitch = TargetRotation.Pitch;
+	CurrentRotation.Roll = TargetRotation.Roll;
 	TurretMesh->SetWorldRotation(FMath::RInterpConstantTo(CurrentRotation, TargetRotation, GetWorld()->GetDeltaSeconds(), TargetingSpeed));
 };
 
@@ -63,7 +68,6 @@ bool ATurret::IsPlayerInRange()
 	{
 		return false;
 	}
-
 	FHitResult HitResult;
 	FVector TraceStart = GetActorLocation();
 	FVector TraceEnd = PlayerPawn->GetActorLocation();
