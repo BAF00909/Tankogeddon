@@ -38,12 +38,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn tanks params")
 	TArray<class ATargetPoint*> TankWayPoints;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UParticleSystemComponent* SpawnEffect;
 
 public:
 	// Sets default values for this actor's properties
 	ATankFactory();
 	UFUNCTION()
-		void TakeDamage(FDamageData DamageData);
+	void TakeDamage(FDamageData DamageData);
 
 
 protected:
@@ -53,10 +55,12 @@ protected:
 	void SpawnNewTank();
 
 	UFUNCTION()
-		void Die();
+	void Die();
 
 	UFUNCTION()
-		void DamageTaked(float DamageValue);
+	void DamageTaked(float DamageValue);
+
+	bool SpawnEffectVisible = false;
 
 
 };

@@ -11,6 +11,7 @@
 #include "Components/ArrowComponent.h"
 #include "Cannon.h"
 #include "Engine/TargetPoint.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ATankPawn::ATankPawn()

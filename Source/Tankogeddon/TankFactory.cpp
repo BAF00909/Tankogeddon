@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/TargetPoint.h"
 #include "MapLoader.h"
+#include "Particles/ParticleSystemComponent.h"
 
 ATankFactory::ATankFactory()
 {
@@ -30,6 +31,10 @@ ATankFactory::ATankFactory()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health component"));
 	HealthComponent->onDie.AddUObject(this, &ATankFactory::Die);
 	HealthComponent->onDamaged.AddUObject(this, &ATankFactory::DamageTaked);
+
+	SpawnEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Spawn Effect"));
+	SpawnEffect->SetupAttachment(TankSpawnPoint);
+	SpawnEffect->ActivateSystem(false);
 }
 
 void ATankFactory::BeginPlay()
@@ -65,10 +70,9 @@ void ATankFactory::SpawnNewTank()
 {
 	FTransform SpawnTransform(TankSpawnPoint->GetComponentRotation(), TankSpawnPoint->GetComponentLocation(), FVector(1));
 	ATankPawn* NewTank = GetWorld()->SpawnActorDeferred<ATankPawn>(SpawnTankClass, SpawnTransform, this, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-	
 	NewTank->SetPatrollingPoints(TankWayPoints);
-
 	UGameplayStatics::FinishSpawningActor(NewTank, SpawnTransform);
+	SpawnEffect->ActivateSystem(false);
 }
 
 
