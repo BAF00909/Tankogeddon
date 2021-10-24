@@ -16,18 +16,13 @@ class TANKOGEDDON_API ATankFactory : public AActor, public IDamageTaker
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UStaticMeshComponent* BuildingMesh;
-
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UArrowComponent* TankSpawnPoint;
-
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UBoxComponent* HitCollider;
-
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UHealthComponent* HealthComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn tanks params")
-	class AMapLoader* LinkedMapLoader;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn tanks params")
 	TSubclassOf<class ATankPawn> SpawnTankClass;
@@ -37,7 +32,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn tanks params")
 	TArray<class ATargetPoint*> TankWayPoints;
-
 
 public:
 	// Sets default values for this actor's properties

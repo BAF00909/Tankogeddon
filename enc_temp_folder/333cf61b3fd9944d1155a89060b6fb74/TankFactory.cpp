@@ -9,7 +9,6 @@
 #include "HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/TargetPoint.h"
-#include "MapLoader.h"
 
 ATankFactory::ATankFactory()
 {
@@ -36,9 +35,6 @@ void ATankFactory::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (LinkedMapLoader)
-		LinkedMapLoader->SetIsActivated(false);
-
 	FTimerHandle _targetingTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(_targetingTimerHandle, this, &ATankFactory::SpawnNewTank, SpawnTankRate, true, SpawnTankRate);
 }
@@ -50,9 +46,6 @@ void ATankFactory::TakeDamage(FDamageData DamageData)
 
 void ATankFactory::Die()
 {
-	if (LinkedMapLoader)
-		LinkedMapLoader->SetIsActivated(true);
-
 	Destroy();
 }
 
@@ -67,7 +60,7 @@ void ATankFactory::SpawnNewTank()
 	ATankPawn* NewTank = GetWorld()->SpawnActorDeferred<ATankPawn>(SpawnTankClass, SpawnTransform, this, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 	
 	NewTank->SetPatrollingPoints(TankWayPoints);
-
+	
 	UGameplayStatics::FinishSpawningActor(NewTank, SpawnTransform);
 }
 
