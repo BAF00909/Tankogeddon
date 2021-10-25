@@ -18,6 +18,9 @@ protected:
 	class UStaticMeshComponent* BuildingMesh;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UStaticMeshComponent* CrashBuildMesh;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UArrowComponent* TankSpawnPoint;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
@@ -38,12 +41,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn tanks params")
 	TArray<class ATargetPoint*> TankWayPoints;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UParticleSystemComponent* SpawnEffect;
+
+	bool bFactoryCrash = false;
 
 public:
 	// Sets default values for this actor's properties
 	ATankFactory();
 	UFUNCTION()
-		void TakeDamage(FDamageData DamageData);
+	void TakeDamage(FDamageData DamageData);
 
 
 protected:
@@ -53,10 +60,12 @@ protected:
 	void SpawnNewTank();
 
 	UFUNCTION()
-		void Die();
+	void Die();
 
 	UFUNCTION()
-		void DamageTaked(float DamageValue);
+	void DamageTaked(float DamageValue);
+
+	bool SpawnEffectVisible = false;
 
 
 };

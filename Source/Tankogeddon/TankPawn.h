@@ -51,7 +51,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Move params| Accurency")
 	float MovementAccurency = 50;
-
 	
 
 	UPROPERTY()
@@ -129,6 +128,7 @@ public:
 	void RotateTurretTo(FVector TargetPosition);
 
 	FVector GetEyesPosition();
+
 
 
 private:

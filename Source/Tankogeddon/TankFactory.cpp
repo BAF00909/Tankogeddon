@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/TargetPoint.h"
 #include "MapLoader.h"
+#include "Particles/ParticleSystemComponent.h"
 
 ATankFactory::ATankFactory()
 {
@@ -21,6 +22,9 @@ ATankFactory::ATankFactory()
 	BuildingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Building Mesh"));
 	BuildingMesh->SetupAttachment(SceneComp);
 
+	CrashBuildMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Crash building mesh"));
+	CrashBuildMesh->SetupAttachment(SceneComp);
+
 	TankSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
 	TankSpawnPoint->AttachToComponent(SceneComp, FAttachmentTransformRules::KeepRelativeTransform);
 
@@ -30,6 +34,9 @@ ATankFactory::ATankFactory()
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health component"));
 	HealthComponent->onDie.AddUObject(this, &ATankFactory::Die);
 	HealthComponent->onDamaged.AddUObject(this, &ATankFactory::DamageTaked);
+
+	SpawnEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Spawn Effect"));
+	SpawnEffect->SetupAttachment(TankSpawnPoint);
 }
 
 void ATankFactory::BeginPlay()
@@ -41,6 +48,9 @@ void ATankFactory::BeginPlay()
 
 	FTimerHandle _targetingTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(_targetingTimerHandle, this, &ATankFactory::SpawnNewTank, SpawnTankRate, true, SpawnTankRate);
+
+	BuildingMesh->SetVisibility(true);
+	CrashBuildMesh->SetVisibility(false);
 }
 
 void ATankFactory::TakeDamage(FDamageData DamageData)
@@ -53,7 +63,9 @@ void ATankFactory::Die()
 	if (LinkedMapLoader)
 		LinkedMapLoader->SetIsActivated(true);
 
-	Destroy();
+	BuildingMesh->SetVisibility(false);
+	CrashBuildMesh->SetVisibility(true);
+	//Destroy();
 }
 
 void ATankFactory::DamageTaked(float DamageValue)
@@ -65,10 +77,9 @@ void ATankFactory::SpawnNewTank()
 {
 	FTransform SpawnTransform(TankSpawnPoint->GetComponentRotation(), TankSpawnPoint->GetComponentLocation(), FVector(1));
 	ATankPawn* NewTank = GetWorld()->SpawnActorDeferred<ATankPawn>(SpawnTankClass, SpawnTransform, this, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-	
 	NewTank->SetPatrollingPoints(TankWayPoints);
-
 	UGameplayStatics::FinishSpawningActor(NewTank, SpawnTransform);
+	SpawnEffect->ActivateSystem(false);
 }
 
 
