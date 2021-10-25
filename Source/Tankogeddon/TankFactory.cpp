@@ -22,6 +22,9 @@ ATankFactory::ATankFactory()
 	BuildingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Building Mesh"));
 	BuildingMesh->SetupAttachment(SceneComp);
 
+	CrashBuildMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Crash building mesh"));
+	CrashBuildMesh->SetupAttachment(SceneComp);
+
 	TankSpawnPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("Cannon setup point"));
 	TankSpawnPoint->AttachToComponent(SceneComp, FAttachmentTransformRules::KeepRelativeTransform);
 
@@ -34,7 +37,6 @@ ATankFactory::ATankFactory()
 
 	SpawnEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Spawn Effect"));
 	SpawnEffect->SetupAttachment(TankSpawnPoint);
-	SpawnEffect->ActivateSystem(false);
 }
 
 void ATankFactory::BeginPlay()
@@ -46,6 +48,9 @@ void ATankFactory::BeginPlay()
 
 	FTimerHandle _targetingTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(_targetingTimerHandle, this, &ATankFactory::SpawnNewTank, SpawnTankRate, true, SpawnTankRate);
+
+	BuildingMesh->SetVisibility(true);
+	CrashBuildMesh->SetVisibility(false);
 }
 
 void ATankFactory::TakeDamage(FDamageData DamageData)
@@ -58,7 +63,9 @@ void ATankFactory::Die()
 	if (LinkedMapLoader)
 		LinkedMapLoader->SetIsActivated(true);
 
-	Destroy();
+	BuildingMesh->SetVisibility(false);
+	CrashBuildMesh->SetVisibility(true);
+	//Destroy();
 }
 
 void ATankFactory::DamageTaked(float DamageValue)

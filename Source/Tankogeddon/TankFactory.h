@@ -18,6 +18,9 @@ protected:
 	class UStaticMeshComponent* BuildingMesh;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+	class UStaticMeshComponent* CrashBuildMesh;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
 	class UArrowComponent* TankSpawnPoint;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
@@ -40,6 +43,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UParticleSystemComponent* SpawnEffect;
+
+	bool bFactoryCrash = false;
 
 public:
 	// Sets default values for this actor's properties
